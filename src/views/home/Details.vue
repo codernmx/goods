@@ -4,6 +4,30 @@
       <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>商品详情</el-breadcrumb-item>
     </el-breadcrumb>
+    <div class="editbutton">
+      <el-button
+        type="primary"
+        @click="editGoods"
+        icon="el-icon-edit"
+        size="mini"
+      ></el-button>
+      <el-popconfirm
+        confirm-button-text="好的"
+        cancel-button-text="取消"
+        icon="el-icon-info"
+        icon-color="red"
+        @cancel="$message.info('取消')"
+        @confirm="deleteGoods"
+        title="确定删除吗？"
+      >
+        <el-button
+          type="danger"
+          icon="el-icon-delete"
+          slot="reference"
+          size="mini"
+        ></el-button>
+      </el-popconfirm>
+    </div>
     <h3 class="cen mt">{{ goodsInfo.TITLE }}</h3>
     <p class="cen mt author">
       {{ goodsInfo.title }}
@@ -19,7 +43,7 @@
       <span class="el-icon-loading loading" v-if="show_loading"></span>
     </div>
     <div>
-      {{goodsInfo.des}}
+      {{ goodsInfo.des }}
     </div>
     <p class="cen mb copyright">Copyright © 2020 By Erha</p>
     <div style="margin-bottom: 49px"></div>
@@ -43,6 +67,35 @@ export default {
     this.init();
   },
   methods: {
+    editGoods() {
+      this.$router.push({
+        path: "/addGoods",
+        name: "AddGoods",
+        query:{
+          id:this.$route.query.id
+        }
+      });
+    },
+    deleteGoods() {
+      api
+        .post("/api/goods/del", {
+          id: this.$route.query.id,
+        })
+        .then((res) => {
+          if (res.code == 200) {
+            this.$message.success("删除成功");
+            setTimeout(() => {
+              this.$router.push({
+                path: "/home",
+                name: "Home",
+              });
+            }, 1500);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     //初始化
     init() {
       api
@@ -99,5 +152,9 @@ export default {
 
 .cative {
   color: #ff5777;
+}
+.editbutton {
+  display: flex;
+  justify-content: right;
 }
 </style>

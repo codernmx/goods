@@ -96,7 +96,7 @@ export default {
     search_goods() {
       api
         .goods_search({
-          title: this.search,
+          search: this.search,
         })
         .then((res) => {
           console.log(res);

@@ -93,25 +93,22 @@ export default {
       this.loginLoading = true
       //获取token
       if (this.password && this.password) {
-        api.post('/tbk/login', {
+        api.post('/api/login', {
           user: this.user,
           password: this.password,
         }).then((res) => {
           console.log(res)
-          if (res.status == 200) {
+          if (res.code == 200) {
             this.$message.success({
               message: '登陆成功',
               center: true
             });
-            console.log(res.results[0])
-            localStorage.token = res.token;//token
-            localStorage.user = res.results[0].USER;//用户
-            localStorage.channelId = res.results[0].CHANNELID;//存储渠道ID
-            localStorage.id = res.results[0].ID;//用户id
-            localStorage.account = res.results[0].ACCOUNT;//账户用来判断是否绑定账号
+            localStorage.user = res.user;//用户
             this.$router.push({
               path: "/profile",
               name: "Profile",
+            }).catch(err => {
+              console.log(err)
             });
           } else {
             this.loginLoading = false

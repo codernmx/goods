@@ -23,7 +23,6 @@
 
       <div
         class="card"
-        @click="toTools"
       >
         <div class="head_box">
           <img
@@ -40,43 +39,15 @@
       </div>
 
       <div class="cell_box">
-        <div class="withDrawal">
-          <div class="expect">
-            <div class="word">付款预估收入</div>
-            <div class="price">￥{{expect | parseInt}}</div>
-          </div>
-          <div class="canCarry">
-            <div class="word">可提现金额</div>
-            <div class="price">￥0.00</div>
-          </div>
-          <div
-            class="toWithDrawal"
-            @click="toWithDrawal"
-          >
-            <div class="word">提现</div>
-          </div>
-        </div>
         <div
           class="cell"
-          @click="toOrderList"
         >
           <div>
             <span class="el-icon-sunny icon"></span>
-            <span>订单列表</span>
+            <span>客服中心</span>
           </div>
           <span class="el-icon-arrow-right"></span>
         </div>
-        <div
-          class="cell"
-          @click="toPhotoList"
-        >
-          <div>
-            <span class="el-icon-star-off icon"></span>
-            <span>我的相册</span>
-          </div>
-          <span class="el-icon-arrow-right"></span>
-        </div>
-
         <div
           class="cell"
           @click="setting"
@@ -86,15 +57,6 @@
             <span>功能设置</span>
           </div>
           <span class="el-icon-arrow-right"></span>
-        </div>
-
-        <div
-          style="text-align:center;margin-top:30px"
-          v-if="isShowAuthorization"
-        >
-          <a :href="getSessionBaseUrl + getSessionBackUrl">
-            <el-button type="danger">立即授权</el-button>
-          </a>
         </div>
       </div>
     </div>
@@ -153,25 +115,7 @@ export default {
     //初始化数据，请求默认数据
     init () {
       this.user = localStorage.getItem('user')
-      const channelId = localStorage.getItem('channelId')
-      api.getOrderList(channelId) //获取所有订单
-        .then((res) => {
-          console.log(res)
-          let num = null
-          res.DATA.forEach(item => {
-            num = num + item.pub_share_pre_fee * item.item_num
-          });
-          this.expect = num
-        })
-        .catch((err) => {
-          console.log(err);
-        });
 
-      if (localStorage.getItem('channelId') == 'null') {
-        this.isShowAuthorization = true
-      } else {
-        this.isShowAuthorization = false
-      }
       // console.log(this.isShowAuthorization)
     },
     getSession (code) {
@@ -230,14 +174,6 @@ export default {
     //跳转设置
     setting () {
       this.$router.push({ path: "/setting", name: "Setting", });
-    },
-    //跳转
-    toTools () {
-      this.$router.push({ path: "/tools", name: "Tools", });
-    },
-    //到订单
-    toOrderList () {
-      this.$router.push({ path: "/order", name: "Order", });
     },
     toWithDrawal () {
       //如果没有account就是没有绑定账号

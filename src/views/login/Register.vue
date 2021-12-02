@@ -54,9 +54,7 @@
         >马上注册</el-button
       >
     </div>
-    <p class="cen" @click="toLogin">
-      已有账号，去登陆
-    </p>
+    <p class="cen" @click="toLogin">已有账号，去登陆</p>
   </div>
 </template>
 
@@ -72,7 +70,7 @@ export default {
       verify: "点击获取",
       user: "",
       password: "",
-      loginLoading: false
+      loginLoading: false,
     };
   },
   created() {
@@ -90,7 +88,7 @@ export default {
     toLogin() {
       this.$router.push({
         path: "/login",
-        name: "Login"
+        name: "Login",
       });
     },
     submit() {
@@ -103,11 +101,34 @@ export default {
           this.password == this.rePassword
         ) {
           //do something
+          api
+            .post("/api/register", {
+              user: this.user,
+              password: this.rePassword,
+            })
+            .then((res) => {
+              console.log(res);
+              if (res.code == 200) {
+                this.$message.success("注册成功");
+                setTimeout(() => {
+                  this.$router.push({
+                    path: "/login",
+                    name: "Login",
+                    params: {
+                      user: this.user,
+                      password: this.rePassword,
+                    },
+                  });
+                }, 1000);
+              } else {
+                this.loginLoading = false;
+              }
+            });
         } else {
           setTimeout(() => {
             this.$message.error({
               message: "验证码不正确或者两次密码不一致",
-              center: true
+              center: true,
             });
             this.loginLoading = false;
           }, 2000);
@@ -116,13 +137,13 @@ export default {
         setTimeout(() => {
           this.$message.error({
             message: "请输入全部信息哦",
-            center: true
+            center: true,
           });
           this.loginLoading = false;
         }, 2000);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

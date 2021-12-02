@@ -33,16 +33,6 @@ axios.interceptors.request.use(
   }
 )
 
-axios.interceptors.response.use(response => {
-  if (response.data.code == 403) {
-    ElementUI.Message.error('当前登录已失效，请重新登录')
-    router.replace({ path: '/login' })
-  }
-  return response;
-}, error => {
-  return Promise.reject(error.response.data)  //返回接口返回的错误信息
-})
-
 
 
 //全局守卫
@@ -50,7 +40,7 @@ router.beforeEach((to, form, next) => {
   //如果进入到的路由是登录页或者注册页面，则正常展示
   if (to.path == '/login' || to.path == '/register') {
     next();
-  } else if (!(localStorage.getItem('token'))) {
+  } else if (!(localStorage.getItem('user'))) {
     ElementUI.Message.warning({
       message: '请登录',
       center: true

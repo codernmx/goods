@@ -79,11 +79,6 @@ const routes = [
     }
   },
   {
-    path: '/withDrawal',
-    name: 'WithDrawal',
-    component: () => import('../views/profile/WithDrawal')
-  },
-  {
     path: '/bound',
     name: 'Bound',
     component: () => import('../views/profile/Bound')
